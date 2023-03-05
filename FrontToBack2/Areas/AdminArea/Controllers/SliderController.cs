@@ -36,7 +36,7 @@ namespace FrontToBack2.Areas.AdminArea.Controllers
                 return View();
 
             }
-            if (!sliderCreateVM.Photo.ContentType.Contains("image"))
+            if (!sliderCreateVM.Photo.IsImage())
             {
                 ModelState.AddModelError("Photo", "only image");
                 return View();
