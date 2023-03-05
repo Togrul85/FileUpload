@@ -1,4 +1,5 @@
 ﻿using FrontToBack2.DAL;
+using FrontToBack2.Extensions;
 using FrontToBack2.Models;
 using FrontToBack2.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -41,25 +42,25 @@ namespace FrontToBack2.Areas.AdminArea.Controllers
                 ModelState.AddModelError("Photo", "only image");
                 return View();
             }
-            if (sliderCreateVM.Photo.Length/1024>500)
+            if (sliderCreateVM.Photo.CheckImageSize(500))
             {
                 ModelState.AddModelError("Photo", "olcusu boyukdur");
                 return View();
             }
 
-            string fileName = Guid.NewGuid().ToString() + sliderCreateVM.Photo.FileName;
+            //string fileName = Guid.NewGuid().ToString() + sliderCreateVM.Photo.FileName;
 
-            string fullPath = Path.Combine(_env.WebRootPath,"img", fileName);
+            //string fullPath = Path.Combine(_env.WebRootPath,"img", fileName);
 
-            using (FileStream stream =new FileStream(fullPath, FileMode.Create))
-                {
-                sliderCreateVM.Photo.CopyTo(stream);
-            }
+            //using (FileStream stream =new FileStream(fullPath, FileMode.Create))
+            //    {
+            //    sliderCreateVM.Photo.CopyTo(stream);
+            //}
            
               
            
             Slider newSlider = new();
-            newSlider.ImageUrl = fileName;
+            newSlider.ImageUrl = sliderCreateVM.Photo.SaveImage(_env,"img",sliderCreateVM.Photo.FileName);
 
             _appDbContext.Sliders.Add(newSlider);
             _appDbContext.SaveChanges();
