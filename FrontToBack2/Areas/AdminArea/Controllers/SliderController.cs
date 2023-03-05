@@ -50,13 +50,20 @@ namespace FrontToBack2.Areas.AdminArea.Controllers
             string fileName = Guid.NewGuid().ToString() + sliderCreateVM.Photo.FileName;
 
             string fullPath = Path.Combine(_env.WebRootPath,"img", fileName);
-            using (FileStream stream =new FileStream(fullPath,FileMode.Create))
-            {
+
+            using (FileStream stream =new FileStream(fullPath, FileMode.Create))
+                {
                 sliderCreateVM.Photo.CopyTo(stream);
             }
+           
+              
+           
             Slider newSlider = new();
             newSlider.ImageUrl = fileName;
-            return Content(fullPath);
+
+            _appDbContext.Sliders.Add(newSlider);
+            _appDbContext.SaveChanges();
+            return RedirectToAction("Index");
 
         }
     }
