@@ -36,19 +36,19 @@ namespace FrontToBack2.Areas.AdminArea.Controllers
 
 
 
-        public IActionResult Delete(int id)
-        {
-            if(id==null) return NotFound();
+        //public IActionResult Delete(int id)
+        //{
+        //    if(id==null) return NotFound();
 
-            Category category = _appDbContext.Categories.SingleOrDefault(c => c.Id == id);
+        //    Category category = _appDbContext.Categories.SingleOrDefault(c => c.Id == id);
 
-            if (category == null)
-            {
-                return NotFound();
-            }
-            return View(category);
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(category);
 
-        }
+        //}
 
         public IActionResult Create()
         {
@@ -120,7 +120,23 @@ namespace FrontToBack2.Areas.AdminArea.Controllers
             return RedirectToAction("Index");
 
         }
-        //
+      
+        public IActionResult Delete(int id)
+        {
+            if (id == null) return NotFound();
+
+            Category category = _appDbContext.Categories.SingleOrDefault(c => c.Id == id);
+
+            if (category == null)
+            {
+    return NotFound();
+            }
+            _appDbContext.Categories.Remove(category);
+            return RedirectToAction("Index");
+
+        }
+
+
 
     }
 }
