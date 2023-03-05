@@ -94,6 +94,33 @@ namespace FrontToBack2.Areas.AdminArea.Controllers
             return View(new CategoryUpdateVM { Name=category.Name,Description=category.Description});
 
         }
+        [HttpPost]
+        public  IActionResult Edit( int id,CategoryUpdateVM updateVM)
+        {
+            if (id == null) return NotFound();
+
+
+            Category existCategory = _appDbContext.Categories.Find(id);
+            if (!ModelState.IsValid) return View();
+
+            bool isExist = _appDbContext.Categories.Any(c => c.Name.ToLower() == updateVM.Name.ToLower()&&c.Id!=id);
+            if (isExist)
+                ModelState.AddModelError("Name", "Bu adli c movcuddur");
+            {
+                return View();
+            }
+            if (existCategory == null)
+            {
+     return NotFound();
+            }
+            existCategory.Name= updateVM.Name;
+            existCategory.Description= updateVM.Description;
+            _appDbContext.SaveChanges();
+            
+            return RedirectToAction("Index");
+
+        }
+        //
 
     }
 }
